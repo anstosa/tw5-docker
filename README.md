@@ -4,7 +4,15 @@
 * Contained nicely in Docker
 * With a nice login page (not HTTP basic auth)
 
-# Usage
+# Requirements
+
+* [Install docker](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
+
+# Run From Docker Hub
+
+1. `docker run --restart unless-stopped -d -p 8080:8080 -v <path/to/tw5-docker>/data:/var/lib/wiki/data anstosa/tw5-docker`
+
+# Build locally
 
 1. `git clone https://github.com/anstosa/tw5-docker.git`
 2. `cd tw5-docker`
