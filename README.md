@@ -36,14 +36,6 @@ I strongly recommend local and offsite backup for your data. Add the `backup.sh`
 
 Use the backup providers of your choice for storing the snapshots in `data/backup/`
 
-## Username/Password
-
-The default username and password are `user` and `tiddlywiki` respectively.
-You can change this by setting the USERNAME and PASSWORD environment variables in your docker run command:
-```
-    ... -e USERNAME="yourname" -e USERNAME="yourpassword" ...
-```
-
 ## Port
 
 By default the port is `8080`.
@@ -51,3 +43,15 @@ You can change this by changing the first port number in the docker run command:
 ```
     ... -p 4040:8080 ...
 ```
+
+## Username/Password
+
+If you wish to restrict access to your wiki, pass the `USERNAME` and `PASSWORD` environment variables in your `docker run` command:
+```
+    ... -e USERNAME="yourname" -e USERNAME="yourpassword" ...
+```
+
+## Encryption
+
+This package does not handle encrypting your traffic.
+It's recommended that you put your container behind a proxy with an SSL certificate.
