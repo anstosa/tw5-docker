@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const bodyParser = require('body-parser');
+const compression = require('compression');
 const ensureLogin = require('connect-ensure-login');
 const express = require('express');
 const local = require('passport-local');
@@ -18,6 +19,7 @@ const user = {
 };
 
 const app = express();
+app.use(compression());
 app.use(session({
     resave: false,
     saveUninitialized: false,
