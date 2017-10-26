@@ -20,11 +20,6 @@ const user = {
 
 const app = express();
 app.use(compression());
-app.use(session({
-    resave: false,
-    saveUninitialized: false,
-    secret: 'tiddlytiddly',
-}));
 app.use(bodyParser.urlencoded({extended: false}));
 app.get('/favicon.ico', (req, res) => {
     res.sendFile(path.join(__dirname, '../data/wiki/tiddlers/favicon.ico'));
@@ -51,6 +46,11 @@ if (user.username && user.password) {
             done(null, user);
         }
     });
+    app.use(session({
+        resave: false,
+        saveUninitialized: false,
+        secret: 'tiddlytiddly',
+    }));
     app.use(passport.initialize());
     app.use(passport.session());
     app.get('/login', (req, res) => {
@@ -61,16 +61,12 @@ if (user.username && user.password) {
         failureRedirect: '/login',
     }));
     app.use('*', ensureLogin.ensureLoggedIn('/login'), proxy('localhost:8888', {
-        proxyReqPathResolver: (req) => {
-            return req.originalUrl;
-        },
+        proxyReqPathResolver: (req) => req.originalUrl,
     }));
 }
 else {
     app.use('*', proxy('localhost:8888', {
-        proxyReqPathResolver: (req) => {
-            return req.originalUrl;
-        },
+        proxyReqPathResolver: (req) => req.originalUrl,
     }));
 }
 app.listen(8080);
