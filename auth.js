@@ -25,6 +25,12 @@ app.get('/favicon.ico', (req, res) => {
     res.sendFile(path.join(__dirname, '../data/wiki/tiddlers/favicon.ico'));
 });
 
+const proxyHandler = proxy('localhost:8888', {
+    limit: '25mb',
+    parseReqBody: false,
+    proxyReqPathResolver: (req) => req.originalUrl,
+});
+
 if (user.username && user.password) {
     passport.use(new local.Strategy((username, password, done) => {
         if (
@@ -60,13 +66,9 @@ if (user.username && user.password) {
         successReturnToOrRedirect: '/',
         failureRedirect: '/login',
     }));
-    app.use('*', ensureLogin.ensureLoggedIn('/login'), proxy('localhost:8888', {
-        proxyReqPathResolver: (req) => req.originalUrl,
-    }));
+    app.use('*', ensureLogin.ensureLoggedIn('/login'), proxyHandler);
 }
 else {
-    app.use('*', proxy('localhost:8888', {
-        proxyReqPathResolver: (req) => req.originalUrl,
-    }));
+    app.use('*', proxyHandler);
 }
 app.listen(8080);
