@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta chatset="utf-8">
+        <title>Login - <%= siteTitle %></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Roboto');
+
+            * { box-sizing: border-box; }
+
+            html, body {
+                height: 100%;
+            }
+
+            body {
+                align-items: center;
+                background: #f4f4f4;
+                display: flex;
+                color: #222;
+                flex-direction: column;
+                font-family: Roboto, sans-serif;
+                font-size: 14px;
+                justify-content: center;
+            }
+
+                .c-login {
+                    background: white;
+                    box-shadow:
+                        0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                        0 3px 1px -2px rgba(0, 0, 0, 0.12),
+                        0 1px 5px 0 rgba(0, 0, 0, 0.2)
+                    ;
+                    display: flex;
+                    flex-direction: column;
+                    padding: 24px;
+                    min-width: 250px;
+                    max-width: 450px;
+                }
+
+                    .c-login__title {
+                        font-weight: normal;
+                        margin-top: 0;
+                    }
+
+                    .c-login__field {
+                        border: none;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+                        font-size: 1.1em;
+                        line-height: 20px;
+                        margin-bottom: 15px;
+                        padding: 5px 0;
+                        position: relative;
+                    }
+
+                    .c-login__field:focus,
+                    .c-login__field:active {
+                        border-bottom-width: 2px;
+                        border-color: #4285f4;
+                        outline: none;
+                        padding-bottom: 4px;
+                    }
+
+                    .c-login__right {
+                        display: flex;
+                        justify-content: flex-end;
+                    }
+
+                    .c-login__button {
+                        background-color: #4285f4;
+                        border: none;
+                        border-radius: 2px;
+                        box-shadow:
+                            0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                            0 3px 1px -2px rgba(0, 0, 0, 0.12),
+                            0 1px 5px 0 rgba(0, 0, 0, 0.2)
+                        ;
+                        color: white;
+                        cursor: pointer;
+                        font-size: 1.1em;
+                        font-weight: bold;
+                        padding: 8px 20px;
+                        text-transform: uppercase;
+                    }
+
+                    .c-login__button:hover,
+                    .c-login__button:focus,
+                    .c-login__button:active {
+                        background-color: #2a56c6;
+                        box-shadow:
+                            0 2px 2px 0 rgba(0, 0, 0, 0.24),
+                            0 3px 1px -2px rgba(0, 0, 0, 0.22),
+                            0 1px 5px 0 rgba(0, 0, 0, 0.12)
+                        ;
+                        outline: none;
+                    }
+        </style>
+    </head>
+    <body>
+        <form class="c-login" action="/login" method="post">
+            <h1 class="c-login__title"><%= siteTitle %></h1>
+            <input
+                autofocus
+                class="c-login__field"
+                name="username"
+                placeholder="Username"
+                type="text"
+            />
+            <input
+                class="c-login__field"
+                name="password"
+                placeholder="Password"
+                type="password"
+            />
+            <div class="c-login__right">
+                <input
+                    class="c-login__button"
+                    type="submit"
+                    value="Log In"
+                />
+            </div>
+        </form>
+        <script>
+            document.querySelector('form').action += window.location.hash;
+        </script>
+    </body>
+</html>

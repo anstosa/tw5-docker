@@ -7,7 +7,7 @@ COPY package.json .
 RUN npm install --silent
 
 COPY auth.js .
-COPY login.html .
+COPY login.ejs .
 EXPOSE 8080
 
 COPY wiki.sh .

@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const ensureLogin = require('connect-ensure-login');
 const express = require('express');
+const fs = require('fs');
 const local = require('passport-local');
 const passport = require('passport');
 const path = require('path');
@@ -33,7 +34,13 @@ const user = {
     password: process.env.PASSWORD,
 };
 
+const SITE_TITLE_DATA = '/var/lib/wiki/data/wiki/tiddlers/$__SiteTitle.tid';
+let siteTitle = fs.readFileSync(SITE_TITLE_DATA).toString().split('\n');
+siteTitle = siteTitle[siteTitle.length - 1];
+console.log(siteTitle);
+
 const app = express();
+app.set('view engine', 'ejs');
 app.use(compression());
 app.use(bodyParser.urlencoded({extended: false}));
 app.get('/favicon.ico', (req, res) => {
@@ -75,7 +82,7 @@ if (user.username && user.password) {
     app.use(passport.initialize());
     app.use(passport.session());
     app.get('/login', (req, res) => {
-        res.sendFile(path.join(__dirname, 'login.html'));
+        res.render(path.join(__dirname, 'login.ejs'), {siteTitle});
     });
     app.post('/login', passport.authenticate('local', {
         successReturnToOrRedirect: '/',
