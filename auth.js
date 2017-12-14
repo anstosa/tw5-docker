@@ -9,8 +9,23 @@ const passport = require('passport');
 const path = require('path');
 const proxy = require('express-http-proxy');
 const session = require('express-session');
+const {spawn} = require('child_process');
 const url = require('url');
 
+const TW_PORT = '8888';
+
+const server = spawn(process.env.TIDDLYWIKI, [
+    'wiki',
+    '--server',
+    TW_PORT,
+    '$:/core/save/lazy-images',
+    'text/plain',
+    'text/html',
+    process.env.USERNAME || 'user',
+    '',
+    '0.0.0.0',
+]);
+server.on('close', (code) => console.error(`TiddlyWiki crashed: ${code}`));
 
 const user = {
     id: 0,
@@ -25,7 +40,7 @@ app.get('/favicon.ico', (req, res) => {
     res.sendFile(path.join(__dirname, '../data/wiki/tiddlers/favicon.ico'));
 });
 
-const proxyHandler = proxy('localhost:8888', {
+const proxyHandler = proxy(`localhost:${TW_PORT}`, {
     limit: '25mb',
     parseReqBody: false,
     proxyReqPathResolver: (req) => req.originalUrl,
