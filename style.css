@@ -18,6 +18,107 @@ body {
     justify-content: center;
 }
 
+    .c-field {
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        font-size: 1.1em;
+        line-height: 20px;
+        margin-bottom: 15px;
+        padding: 5px 0;
+        position: relative;
+    }
+
+    .c-field:focus,
+    .c-field:active {
+        border-bottom-width: 2px;
+        border-color: #4285f4;
+        outline: none;
+        padding-bottom: 4px;
+    }
+
+    .c-checkbox {
+        align-items: center;
+        display: flex;
+        margin-bottom: 15px;
+    }
+
+        .c-checkbox__label {
+            font-size: 1.1em;
+            flex: 1;
+            line-height: 20px;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .c-checkbox__input {
+            border: none;
+        }
+
+    .c-button {
+        background-color: #4285f4;
+        border: none;
+        border-radius: 2px;
+        box-shadow:
+            0 2px 2px 0 rgba(0, 0, 0, 0.14),
+            0 3px 1px -2px rgba(0, 0, 0, 0.12),
+            0 1px 5px 0 rgba(0, 0, 0, 0.2)
+        ;
+        color: white;
+        cursor: pointer;
+        font-size: 1.1em;
+        font-weight: bold;
+        padding: 8px 20px;
+        text-transform: uppercase;
+    }
+
+    .c-button:hover,
+    .c-button:focus,
+    .c-button:active {
+        background-color: #2a56c6;
+        box-shadow:
+            0 2px 2px 0 rgba(0, 0, 0, 0.24),
+            0 3px 1px -2px rgba(0, 0, 0, 0.22),
+            0 1px 5px 0 rgba(0, 0, 0, 0.12)
+        ;
+        outline: none;
+    }
+
+    .c-tabs {}
+
+        .c-tabs__nav {
+            background: #2196f3;
+            color: white;
+            display: flex;
+            font-size: 1.2em;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+            .c-tabs__nav__link {
+                border-bottom: 2px solid transparent;
+                cursor: pointer;
+                padding: 10px;
+            }
+
+            .c-tabs__nav__link--selected {
+                border-bottom-color: white;
+            }
+
+        .c-tabs__content {
+            margin: 0;
+            padding: 0;
+        }
+
+            .c-tabs__content__area {
+                display: none;
+                flex-direction: column;
+                padding-top: 24px;
+            }
+
+            .c-tabs__content__area--selected {
+                display: flex;
+            }
+
     .c-container {
         background: white;
         box-shadow:
@@ -37,72 +138,7 @@ body {
             margin-top: 0;
         }
 
-        .c-container__field {
-            border: none;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-            font-size: 1.1em;
-            line-height: 20px;
-            margin-bottom: 15px;
-            padding: 5px 0;
-            position: relative;
-        }
-
-        .c-container__field:focus,
-        .c-container__field:active {
-            border-bottom-width: 2px;
-            border-color: #4285f4;
-            outline: none;
-            padding-bottom: 4px;
-        }
-
-        .c-container__checkbox {
-            align-items: center;
-            display: flex;
-            margin-bottom: 15px;
-        }
-
-        .c-container__checkbox__label {
-            font-size: 1.1em;
-            flex: 1;
-            line-height: 20px;
-            padding: 5px 0;
-            position: relative;
-        }
-
-        .c-container__checkbox__input {
-            border: none;
-        }
-
         .c-container__right {
             display: flex;
             justify-content: flex-end;
-        }
-
-        .c-container__button {
-            background-color: #4285f4;
-            border: none;
-            border-radius: 2px;
-            box-shadow:
-                0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                0 3px 1px -2px rgba(0, 0, 0, 0.12),
-                0 1px 5px 0 rgba(0, 0, 0, 0.2)
-            ;
-            color: white;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: bold;
-            padding: 8px 20px;
-            text-transform: uppercase;
-        }
-
-        .c-container__button:hover,
-        .c-container__button:focus,
-        .c-container__button:active {
-            background-color: #2a56c6;
-            box-shadow:
-                0 2px 2px 0 rgba(0, 0, 0, 0.24),
-                0 3px 1px -2px rgba(0, 0, 0, 0.22),
-                0 1px 5px 0 rgba(0, 0, 0, 0.12)
-            ;
-            outline: none;
         }

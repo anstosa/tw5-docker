@@ -41,9 +41,22 @@ const user = {
     password: process.env.PASSWORD,
 };
 
+const escapeTitle = (title) => title.replace(/[:\/]/g, '_');
+
+const INBOX_TITLE = '$:/plugins/anstosa/tw5-docker/config';
 const SITE_TITLE_DATA = '/var/lib/wiki/data/wiki/tiddlers/$__SiteTitle.tid';
 let siteTitle = fs.readFileSync(SITE_TITLE_DATA).toString().split('\n');
 siteTitle = siteTitle[siteTitle.length - 1];
+
+const INBOX_DATA = `/var/lib/wiki/data/wiki/tiddlers/${escapeTitle(INBOX_TITLE)}.tid`;
+let inboxTitle = null;
+let inboxPrefix = '';
+try {
+    const inboxData = fs.readFileSync(INBOX_DATA).toString().split('\n');
+    inboxTitle = inboxData[inboxData.length - 2]
+    inboxPrefix = inboxData[inboxData.length - 1]
+}
+catch (e) {}
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -77,8 +90,11 @@ function renderMessage(message, res) {
 // replaces spaces in the title with underscores, so it might not work always.
 // Updates the modified time, then adds the provided content to the end.
 function appendToTiddler(title, content, res) {
-    const fileTitle = title;
-    const fileName = `../data/wiki/tiddlers/${fileTitle}.tid`;
+    const fileName = `../data/wiki/tiddlers/${escapeTitle(title)}.tid`;
+    if (!title) {
+        renderMessage('Please configure the Inbox tab first in Settings', res);
+        return;
+    }
     fs.readFile(fileName, (err, data) => {
         if (err) {
             renderMessage(`There was a problem reading the file "${fileName}"`, res);
@@ -106,13 +122,12 @@ function appendToTiddler(title, content, res) {
 }
 
 // storeNewTiddler creates a new tiddler, stored in a file based on the title.
-function storeNewTiddler(title, tags, content, res) {
-    const fileTitle = title;
-    const fileName = `../data/wiki/tiddlers/${fileTitle}.tid`;
+function storeNewTiddler(title, tags, content, res, force) {
+    const fileName = `../data/wiki/tiddlers/${escapeTitle(title)}.tid`;
     const now = getTimestamp();
 
     fs.open(fileName, 'wx', (err, fd) => {
-        if (err && err.code === 'EEXIST') {
+        if (!force && err && err.code === 'EEXIST') {
             renderMessage('Unable to store your file: It already exists!', res);
             return;
         }
@@ -189,14 +204,31 @@ if (user.username && user.password) {
     const ensureLoggedIn = ensureLogin.ensureLoggedIn('/login');
 
     app.get('/quickstore', ensureLoggedIn, (req, res) => {
-        res.render(path.join(__dirname, 'quickStoreForm.ejs'), {siteTitle});
+        res.render(path.join(__dirname, 'quickStoreForm.ejs'), {
+            inboxTitle,
+            inboxPrefix,
+            siteTitle,
+        });
     });
     app.post('/quickstore', ensureLoggedIn, (req, res) => {
         // retrieves data from the incoming quick-store request and
         // stores the contents in the TiddlyWiki, based on the options selected
-        const {append, content, tags, title} = req.body;
+        const {append, inbox, prefix, settings, tags, title} = req.body;
+        let {content} = req.body;
 
-        if (append) {
+        if (settings) {
+            inboxTitle = title;
+            inboxPrefix = prefix;
+            content = [
+                title,
+                prefix,
+            ].join('\n');
+            storeNewTiddler(INBOX_TITLE, tags, config, res, true);
+        }
+        else if (append) {
+            if (inbox) {
+                content = `${inboxPrefix}${content}`;
+            }
             appendToTiddler(title, content, res);
         }
         else {

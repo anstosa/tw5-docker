@@ -4,14 +4,28 @@
         <meta chatset="utf-8">
         <title>Quick Store - <%= siteTitle %></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="/style.css" type="text/css" rel="stylesheet" />
+        <link href="/style.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <style>
             @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 
             .p-quickstore__container {
                 max-width: 100%;
-                min-height: 450px;
+                min-height: 400px;
                 width: 450px;
+            }
+
+            .p-quickstore__title {
+                background: #2196f3;
+                color: white;
+                margin: -24px;
+                margin-bottom: 0;
+                padding: 24px;
+            }
+
+            .p-quickstore__tabs .c-tabs__nav {
+                margin: 0 -24px;
+                padding: 0 24px;
             }
 
             .p-quickstore__content {
@@ -21,69 +35,173 @@
         </style>
     </head>
     <body class="p-quickstore">
-        <form
+        <div
             class="c-container p-quickstore__container"
-            action="/quickstore"
-            method="post"
         >
-            <h1 class="c-container__title"><%= siteTitle %></h1>
-            <input
-                autofocus
-                class="c-container__field"
-                name="title"
-                placeholder="Title"
-                type="text"
-            />
-            <label class="c-container__checkbox">
-                <input
-                    class="c-container__checkbox__input"
-                    name="append"
-                    type="checkbox"
-                />
-                <span class="c-container__checkbox__label">
-                    Append to existing file
-                </span>
-            </label>
-            <input
-                class="c-container__field p-quickstore__tags"
-                name="tags"
-                placeholder="Tags"
-                type="text"
-            />
-            <textarea
-                class="c-container__field p-quickstore__content"
-                name="content"
-                placeholder="Content"
-                type="text"
-            ></textarea>
-            <div class="c-container__right">
-                <input
-                    class="c-container__button p-quickstore__action"
-                    type="submit"
-                    value="Save"
-                />
+            <h1 class="c-container__title p-quickstore__title"><%= siteTitle %></h1>
+            <div class="c-tabs p-quickstore__tabs">
+                <ul class="c-tabs__nav">
+                    <li class="c-tabs__nav__link c-tabs__nav__link--selected">Create</li>
+                    <li class="c-tabs__nav__link">Append</li>
+                    <% if (locals.inboxTitle) { %>
+                    <li class="c-tabs__nav__link">Inbox</li>
+                    <% } %>
+                    <li class="c-tabs__nav__link">Settings</li>
+                </ul>
+                <div class="c-tabs__content">
+                    <form
+                        class="c-tabs__content__area c-tabs__content__area--selected"
+                        action="/quickstore"
+                        method="post"
+                    >
+                        <input
+                            autofocus
+                            class="c-field"
+                            name="title"
+                            placeholder="Title"
+                            type="text"
+                        />
+                        <input
+                            class="c-field p-quickstore__tags"
+                            name="tags"
+                            placeholder="Tags"
+                            type="text"
+                        />
+                        <textarea
+                            class="c-field p-quickstore__content"
+                            name="content"
+                            placeholder="Content"
+                            type="text"
+                        ></textarea>
+                        <div class="c-container__right">
+                            <input
+                                class="c-button p-quickstore__action"
+                                type="submit"
+                                value="Save"
+                            />
+                        </div>
+                    </form>
+                    <form
+                        class="c-tabs__content__area"
+                        action="/quickstore"
+                        method="post"
+                    >
+                        <input
+                            name="append"
+                            type="hidden"
+                            value="true"
+                        />
+                        <input
+                            autofocus
+                            class="c-field"
+                            name="title"
+                            placeholder="Title"
+                            type="text"
+                        />
+                        <textarea
+                            class="c-field p-quickstore__content"
+                            name="content"
+                            placeholder="Content"
+                            type="text"
+                        ></textarea>
+                        <div class="c-container__right">
+                            <input
+                                class="c-button p-quickstore__action"
+                                type="submit"
+                                value="Update"
+                            />
+                        </div>
+                    </form>
+                    <% if (locals.inboxTitle) { %>
+                    <form
+                        class="c-tabs__content__area"
+                        action="/quickstore"
+                        method="post"
+                    >
+                        <input
+                            name="append"
+                            type="hidden"
+                            value="true"
+                        />
+                        <input
+                            name="inbox"
+                            type="hidden"
+                            value="true"
+                        />
+                        <input
+                            autofocus
+                            class="c-field"
+                            name="title"
+                            placeholder="Title"
+                            type="hidden"
+                            value="<%= inboxTitle %>"
+                        />
+                        <textarea
+                            class="c-field p-quickstore__content"
+                            name="content"
+                            placeholder="Content"
+                            type="text"
+                        ></textarea>
+                        <div class="c-container__right">
+                            <input
+                                class="c-button p-quickstore__action"
+                                type="submit"
+                                value="Update"
+                            />
+                        </div>
+                    </form>
+                    <% } %>
+                    <form
+                        class="c-tabs__content__area"
+                        action="/quickstore"
+                        method="post"
+                    >
+                        <input
+                            name="settings"
+                            type="hidden"
+                            value="true"
+                        />
+                        <input
+                            autofocus
+                            class="c-field"
+                            name="title"
+                            placeholder="Title"
+                            type="text"
+                            value="<%= inboxTitle %>"
+                        />
+                        <textarea
+                            class="c-field p-quickstore__content"
+                            name="prefix"
+                            placeholder="Item Prefix (*, #, - [ ], etc)"
+                            type="text"
+                        ><%= inboxPrefix %></textarea>
+                        <div class="c-container__right">
+                            <input
+                                class="c-button p-quickstore__action"
+                                type="submit"
+                                value="Save"
+                            />
+                        </div>
+                    </form>
+                </div>
             </div>
         </form>
         <script>
-            function toggleSaveAction(event) {
-                const tags = document.querySelector('.p-quickstore__tags');
-                const action = document.querySelector('.p-quickstore__action');
-
-                if (event.target.checked) {
-                    action.value = 'Update';
-                    tags.style.display = 'none';
-                    tags.value = '';
-                }
-                else {
-                    action.value = 'Save';
-                    tags.style.display = 'block';
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', () => {
-                const checkbox = document.querySelector('.c-container__checkbox');
-                checkbox.addEventListener('change', toggleSaveAction);
-            }, false);
+            const tabs = document.querySelector('.c-tabs');
+            const links = document.querySelectorAll('.c-tabs__nav__link');
+            const areas = document.querySelectorAll('.c-tabs__content__area');
+            let currentLink = links[0];
+            let currentArea = areas[0];
+            tabs.querySelectorAll('.c-tabs__nav__link').forEach((link, index) => {
+                link.addEventListener('click', () => {
+                    currentLink.classList.remove('c-tabs__nav__link--selected');
+                    currentLink = links[index];
+                    currentLink.classList.add('c-tabs__nav__link--selected');
+                    currentArea.classList.remove('c-tabs__content__area--selected');
+                    currentArea = areas[index];
+                    currentArea.classList.add('c-tabs__content__area--selected');
+                });
+            });
         </script>
     </body>
 </html>
