@@ -2,7 +2,8 @@
 
 * [TiddlyWiki5](http://tiddlywiki.com)
 * Contained nicely in Docker
-* With a nice login page (not HTTP basic auth)
+* With a user and password manager friendly login page (not HTTP basic auth)
+* With a quickstore form for rapidly creating or updating tiddlers on the go without loading all of tiddlywiki
 
 # Requirements
 
