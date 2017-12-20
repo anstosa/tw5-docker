@@ -7,6 +7,7 @@ COPY package.json .
 RUN npm install --silent
 
 COPY auth.js .
+COPY style.css .
 COPY login.ejs .
 COPY quickStoreForm.ejs .
 COPY quickStoreMessage.ejs .

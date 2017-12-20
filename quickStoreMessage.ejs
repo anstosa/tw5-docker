@@ -4,50 +4,16 @@
         <meta chatset="utf-8">
         <title>Quick Store - <%= siteTitle %></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+        <link href="/style.css" type="text/css" rel="stylesheet" />
         <style>
-            @import url('https://fonts.googleapis.com/css?family=Roboto');
-
-            * { box-sizing: border-box; }
-
-            html, body {
-                height: 100%;
+            .p-message__container {
+                text-align: center;
             }
-
-            body {
-                align-items: center;
-                background: #f4f4f4;
-                display: flex;
-                color: #222;
-                flex-direction: column;
-                font-family: Roboto, sans-serif;
-                font-size: 14px;
-                justify-content: center;
-            }
-
-                .c-msg {
-                    background: white;
-                    box-shadow:
-                        0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                        0 3px 1px -2px rgba(0, 0, 0, 0.12),
-                        0 1px 5px 0 rgba(0, 0, 0, 0.2)
-                    ;
-                    display: flex;
-                    flex-direction: column;
-                    font-size: 1.1em;
-                    padding: 24px;
-                    min-width: 250px;
-                    max-width: 450px;
-                    text-align: center;
-                }
         </style>
     </head>
-    <body>
-        <div class="c-msg">
+    <body class="p-message">
+        <div class="c-container p-message__container">
             <p><%= message %></p>
         </div>
-        <script>
-            document.querySelector('form').action += window.location.hash;
-        </script>
     </body>
 </html>
