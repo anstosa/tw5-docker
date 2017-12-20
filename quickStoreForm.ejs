@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta chatset="utf-8">
+        <title>Quick Store - <%= siteTitle %></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Roboto');
+
+            * { box-sizing: border-box; }
+
+            html, body {
+                height: 100%;
+            }
+
+            body {
+                align-items: center;
+                background: #f4f4f4;
+                display: flex;
+                color: #222;
+                flex-direction: column;
+                font-family: Roboto, sans-serif;
+                font-size: 14px;
+                justify-content: center;
+            }
+
+                .c-quickstore {
+                    background: white;
+                    box-shadow:
+                        0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                        0 3px 1px -2px rgba(0, 0, 0, 0.12),
+                        0 1px 5px 0 rgba(0, 0, 0, 0.2)
+                    ;
+                    display: flex;
+                    flex-direction: column;
+                    padding: 24px;
+                    min-width: 250px;
+                    max-width: 450px;
+                }
+
+                    .c-quickstore__title {
+                        font-weight: normal;
+                        margin-top: 0;
+                    }
+
+                    .c-quickstore__field {
+                        border: none;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+                        font-size: 1.1em;
+                        line-height: 20px;
+                        margin-bottom: 15px;
+                        padding: 5px 0;
+                        position: relative;
+                    }
+
+                    .c-quickstore__field:focus,
+                    .c-quickstore__field:active {
+                        border-bottom-width: 2px;
+                        border-color: #4285f4;
+                        outline: none;
+                        padding-bottom: 4px;
+                    }
+
+                    .c-quickstore__inline {
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 15px;
+                    }
+
+                    .c-quickstore__label {
+                        color: #747474;
+                        font-size: 1.1em;
+                        line-height: 20px;
+                        padding: 5px 0;
+                        position: relative;
+                    }
+
+                    .c-quickstore__checkbox {
+                        border: none;
+                    }
+
+                    .c-quickstore__right {
+                        display: flex;
+                        justify-content: flex-end;
+                    }
+
+                    .c-quickstore__button {
+                        background-color: #4285f4;
+                        border: none;
+                        border-radius: 2px;
+                        box-shadow:
+                            0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                            0 3px 1px -2px rgba(0, 0, 0, 0.12),
+                            0 1px 5px 0 rgba(0, 0, 0, 0.2)
+                        ;
+                        color: white;
+                        cursor: pointer;
+                        font-size: 1.1em;
+                        font-weight: bold;
+                        padding: 8px 20px;
+                        text-transform: uppercase;
+                    }
+
+                    .c-quickstore__button:hover,
+                    .c-quickstore__button:focus,
+                    .c-quickstore__button:active {
+                        background-color: #2a56c6;
+                        box-shadow:
+                            0 2px 2px 0 rgba(0, 0, 0, 0.24),
+                            0 3px 1px -2px rgba(0, 0, 0, 0.22),
+                            0 1px 5px 0 rgba(0, 0, 0, 0.12)
+                        ;
+                        outline: none;
+                    }
+        </style>
+    </head>
+    <body>
+        <form class="c-quickstore" action="/quickstore" method="post">
+            <h1 class="c-quickstore__title"><%= siteTitle %></h1>
+            <input
+                autofocus
+                class="c-quickstore__field"
+                name="title"
+                placeholder="Title"
+                type="text"
+            />
+            <div class="c-quickstore__inline">
+                <label class="c-quickstore__label" for="append__cb" >
+                    Append
+                </label>
+                <input
+                    class="c-quickstore__checkbox"
+                    name="append"
+                    type="checkbox"
+                    id="append__cb"
+                />
+            </div>
+            <input
+                id="c-quickstore-tags__field"
+                class="c-quickstore__field"
+                name="tags"
+                placeholder="Tags"
+                type="text"
+            />
+            <textarea
+                class="c-quickstore__field"
+                name="content"
+                placeholder="Content"
+                type="text"
+            ></textarea>
+            <div class="c-quickstore__right">
+                <input
+                    class="c-quickstore__button"
+                    type="submit"
+                    value="Save"
+                />
+            </div>
+        </form>
+        <script>
+            document.querySelector('form').action += window.location.hash;
+
+            function toggleTagsField(event) {
+                var elem = document.getElementById('c-quickstore-tags__field');
+
+                if (event.target.checked === true) {
+                    elem.style.display = 'none';
+                    elem.value = '';
+                } else {
+                    elem.style.display = 'block';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded',function() {
+                document.querySelector('.c-quickstore__checkbox').onchange=toggleTagsField;
+            },false);
+
+        </script>
+    </body>
+</html>

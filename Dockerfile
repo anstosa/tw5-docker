@@ -8,6 +8,8 @@ RUN npm install --silent
 
 COPY auth.js .
 COPY login.ejs .
+COPY quickStoreForm.ejs .
+COPY quickStoreMessage.ejs .
 EXPOSE 8080
 
 COPY wiki.sh .
