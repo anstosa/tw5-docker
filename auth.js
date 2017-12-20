@@ -205,7 +205,7 @@ if (user.username && user.password) {
         restartServer();
     });
 
-    app.use('*', ensureLogin.ensureLoggedIn('/login'), proxyHandler);
+    app.use('*', ensureLoggedIn, proxyHandler);
 }
 else {
     app.use('*', proxyHandler);
