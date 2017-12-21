@@ -216,6 +216,11 @@ if (user.username && user.password) {
         const {append, inbox, prefix, settings, tags, title} = req.body;
         let {content} = req.body;
 
+        if (!inbox && title === '') {
+            renderMessage('Please provide the Tiddler tidle', res);
+            return;
+        }
+
         if (settings) {
             inboxTitle = title;
             inboxPrefix = prefix;
@@ -223,7 +228,7 @@ if (user.username && user.password) {
                 title,
                 prefix,
             ].join('\n');
-            storeNewTiddler(INBOX_TITLE, tags, config, res, true);
+            storeNewTiddler(INBOX_TITLE, tags, content, res, true);
         }
         else if (append) {
             if (inbox) {
