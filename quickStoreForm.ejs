@@ -11,7 +11,7 @@
 
             .p-quickstore__container {
                 max-width: 100%;
-                min-height: 400px;
+                min-height: 500px;
                 width: 450px;
             }
 
@@ -25,11 +25,12 @@
 
             .p-quickstore__tabs .c-tabs__nav {
                 margin: 0 -24px;
-                padding: 0 24px;
+                padding: 0 9px;
             }
 
             .p-quickstore__content {
                 font-family: 'Roboto Mono', monospace;
+                flex: 1;
                 min-height: 150px;
             }
         </style>
@@ -46,8 +47,9 @@
                     <li class="c-tabs__nav__link c-tabs__nav__link--selected">Create</li>
                     <li class="c-tabs__nav__link">Append</li>
                     <% if (locals.inboxTitle) { %>
-                    <li class="c-tabs__nav__link">Inbox</li>
+                    <li class="c-tabs__nav__link"><%= inboxTitle %></li>
                     <% } %>
+                    <li class="c-tabs__nav__spacer"></li>
                     <li class="c-tabs__nav__link">Settings</li>
                 </ul>
                 <div class="c-tabs__content">
@@ -70,7 +72,7 @@
                             type="text"
                         />
                         <textarea
-                            class="c-field p-quickstore__content"
+                            class="c-field c-field--textarea p-quickstore__content"
                             name="content"
                             placeholder="Content"
                             type="text"
@@ -101,7 +103,7 @@
                             type="text"
                         />
                         <textarea
-                            class="c-field p-quickstore__content"
+                            class="c-field c-field--textarea p-quickstore__content"
                             name="content"
                             placeholder="Content"
                             type="text"
@@ -139,7 +141,7 @@
                             value="<%= inboxTitle %>"
                         />
                         <textarea
-                            class="c-field p-quickstore__content"
+                            class="c-field c-field--textarea p-quickstore__content"
                             name="content"
                             placeholder="Content"
                             type="text"
@@ -172,7 +174,7 @@
                             value="<%= inboxTitle %>"
                         />
                         <textarea
-                            class="c-field p-quickstore__content"
+                            class="c-field c-field--textarea p-quickstore__content"
                             name="prefix"
                             placeholder="Item Prefix (*, #, - [ ], etc)"
                             type="text"

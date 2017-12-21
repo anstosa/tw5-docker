@@ -28,12 +28,23 @@ body {
         position: relative;
     }
 
+    .c-field--textarea {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        padding: 5px;
+    }
+
     .c-field:focus,
     .c-field:active {
         border-bottom-width: 2px;
         border-color: #4285f4;
         outline: none;
         padding-bottom: 4px;
+    }
+
+    .c-field--textarea:focus,
+    .c-field--textarea:active {
+        border-width: 2px;
+        padding: 4px;
     }
 
     .c-checkbox {
@@ -83,7 +94,11 @@ body {
         outline: none;
     }
 
-    .c-tabs {}
+    .c-tabs {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+    }
 
         .c-tabs__nav {
             background: #2196f3;
@@ -94,10 +109,15 @@ body {
             margin: 0;
             padding: 0;
         }
+
             .c-tabs__nav__link {
                 border-bottom: 2px solid transparent;
                 cursor: pointer;
-                padding: 10px;
+                padding: 10px 15px;
+            }
+
+            .c-tabs__nav__spacer {
+                flex: 1;
             }
 
             .c-tabs__nav__link--selected {
@@ -105,12 +125,16 @@ body {
             }
 
         .c-tabs__content {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
             margin: 0;
             padding: 0;
         }
 
             .c-tabs__content__area {
                 display: none;
+                flex: 1;
                 flex-direction: column;
                 padding-top: 24px;
             }
@@ -136,6 +160,10 @@ body {
         .c-container__title {
             font-weight: normal;
             margin-top: 0;
+        }
+
+        .c-container__spacer {
+            flex: 1;
         }
 
         .c-container__right {
