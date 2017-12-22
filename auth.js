@@ -56,7 +56,7 @@ try {
     inboxTitle = inboxData[inboxData.length - 2]
     inboxPrefix = inboxData[inboxData.length - 1]
 }
-catch (e) {}
+catch (error) {}
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -86,73 +86,88 @@ function renderMessage(message, res) {
     res.render(path.join(__dirname, 'quickStoreMessage.ejs'), {siteTitle, message});
 }
 
+function renderForm(req, res, params) {
+    params = {
+        content: '',
+        inboxPrefix,
+        inboxTitle,
+        index: 0,
+        siteTitle,
+        tags: '',
+        title: '',
+        ...params,
+    };
+    console.log(params);
+    res.render(path.join(__dirname, 'quickStoreForm.ejs'), params);
+}
+
 // appendToTiddler looks for the file with the provided title, however it only
 // replaces spaces in the title with underscores, so it might not work always.
 // Updates the modified time, then adds the provided content to the end.
-function appendToTiddler(title, content, res) {
+function appendToTiddler(title, content) {
     const fileName = `../data/wiki/tiddlers/${escapeTitle(title)}.tid`;
     if (!title) {
-        renderMessage('Please configure the Inbox tab first in Settings', res);
-        return;
+        return {error: 'Please configure the Inbox tab first in Settings'};
     }
-    fs.readFile(fileName, (err, data) => {
-        if (err) {
-            renderMessage(`There was a problem reading the file "${fileName}"`, res);
-            return;
-        }
+    let data;
+    try {
+        data = fs.readFileSync(fileName);
+    }
+    catch (error) {
+        return {error: `The target file does not exist "${fileName}"`};
+    }
 
-        if (data.indexOf(`title: ${title}`) == -1) {
-            renderMessage(`The file "${fileName}" did not contain the expected title`, res);
-            return;
-        }
+    if (data.indexOf(`title: ${title}`) == -1) {
+        return {error: `The file "${fileName}" did not contain the expected title`};
+    }
 
-        data = String(data);
-        data = data.replace(/modified: [0-9]+/ , `modified: ${getTimestamp()}`);
-        data += `\n${content}`;
+    data = String(data);
+    data = data.replace(/modified: [0-9]+/ , `modified: ${getTimestamp()}`);
+    data += `\n${content}`;
 
-        fs.writeFile(fileName, data, (err) => {
-            if (err) {
-                renderMessage(`There was a problem updating your file: ${err}`, res);
-            }
-            else {
-                renderMessage('Your file has been updated', res);
-            }
-        });
-    });
+    try {
+        fs.writeFileSync(fileName, data);
+    }
+    catch (error) {
+        return {error: `There was a problem updating your file: ${err}`};
+    }
+    return {success: 'Your file has been updated'};
 }
 
 // storeNewTiddler creates a new tiddler, stored in a file based on the title.
-function storeNewTiddler(title, tags, content, res, force) {
+function storeNewTiddler(title, tags, content, shouldOverwrite=false) {
     const fileName = `../data/wiki/tiddlers/${escapeTitle(title)}.tid`;
     const now = getTimestamp();
 
-    fs.open(fileName, 'wx', (err, fd) => {
-        if (!force && err && err.code === 'EEXIST') {
-            renderMessage('Unable to store your file: It already exists!', res);
-            return;
+    if (!shouldOverwrite) {
+        try {
+            fs.openSync(fileName, 'wx');
+        } catch (error) {
+            if (error.code === 'EEXIST') {
+                return {error: 'Unable to save: File already exists!'};
+            }
         }
+    }
 
-        let fileBody = [
-            `created: ${now}`,
-            `creator: ${user.username}`,
-            `modified: ${now}`,
-            `modifier: ${user.username}`,
-            `tags: ${tags}`,
-            `title: ${title}`,
-            `type: text/vnd.tiddlywiki`,
-            '',
-            content
-        ].join('\n');
+    const fileBody = [
+        `created: ${now}`,
+        `creator: ${user.username}`,
+        `modified: ${now}`,
+        `modifier: ${user.username}`,
+        `tags: ${tags}`,
+        `title: ${title}`,
+        `type: text/vnd.tiddlywiki`,
+        '',
+        content
+    ].join('\n');
 
-        fs.writeFile(fileName, fileBody, (err) => {
-            if (err) {
-                renderMessage(`There was a problem storing your file: ${err}`, res);
-            }
-            else {
-                renderMessage('Your file has been stored', res);
-            }
-        });
-    });
+    try {
+        fs.writeFileSync(fileName, fileBody);
+    }
+    catch (error) {
+        return {error: `There was a problem storing your file: ${err}`};
+    }
+    return {success: 'Your file has been stored'};
 }
 
 const proxyHandler = proxy(`localhost:${TW_PORT}`, {
@@ -203,41 +218,43 @@ if (user.username && user.password) {
     }));
     const ensureLoggedIn = ensureLogin.ensureLoggedIn('/login');
 
-    app.get('/quickstore', ensureLoggedIn, (req, res) => {
-        res.render(path.join(__dirname, 'quickStoreForm.ejs'), {
-            inboxTitle,
-            inboxPrefix,
-            siteTitle,
-        });
-    });
+    app.get('/quickstore', ensureLoggedIn, renderForm);
     app.post('/quickstore', ensureLoggedIn, (req, res) => {
         // retrieves data from the incoming quick-store request and
         // stores the contents in the TiddlyWiki, based on the options selected
-        const {append, inbox, prefix, settings, tags, title} = req.body;
+        const {append, inbox, index, prefix, settings, tags, title} = req.body;
         let {content} = req.body;
+        let result;
 
-        if (!inbox && title === '') {
-            renderMessage('Please provide the Tiddler tidle', res);
-            return;
+        if (!inbox && !title) {
+            result = {error: 'Please provide the Tiddler title'};
         }
-
-        if (settings) {
+        else if (settings) {
             inboxTitle = title;
             inboxPrefix = prefix;
             content = [
-                title,
-                prefix,
+                inboxTitle,
+                inboxPrefix,
             ].join('\n');
-            storeNewTiddler(INBOX_TITLE, tags, content, res, true);
+            result = storeNewTiddler(INBOX_TITLE, tags, content, true);
+            if (!result.error) {
+                result.success = 'Settings saved!';
+            }
         }
         else if (append) {
             if (inbox) {
                 content = `${inboxPrefix}${content}`;
             }
-            appendToTiddler(title, content, res);
+            result = appendToTiddler(title, content);
         }
         else {
-            storeNewTiddler(title, tags, content, res);
+            result = storeNewTiddler(title, tags, content);
+        }
+        if (result.error) {
+            renderForm(req, res, {...req.body, ...result})
+        }
+        else {
+            renderForm(req, res, {index, ...result});
         }
         restartServer();
     });

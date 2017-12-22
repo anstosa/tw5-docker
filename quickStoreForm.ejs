@@ -44,7 +44,7 @@
             </h1>
             <div class="c-tabs p-quickstore__tabs">
                 <ul class="c-tabs__nav">
-                    <li class="c-tabs__nav__link c-tabs__nav__link--selected">Create</li>
+                    <li class="c-tabs__nav__link">Create</li>
                     <li class="c-tabs__nav__link">Append</li>
                     <% if (locals.inboxTitle) { %>
                     <li class="c-tabs__nav__link"><%= inboxTitle %></li>
@@ -54,29 +54,36 @@
                 </ul>
                 <div class="c-tabs__content">
                     <form
-                        class="c-tabs__content__area c-tabs__content__area--selected"
+                        class="c-tabs__content__area"
                         action="/quickstore"
                         method="post"
                     >
+                        <input
+                            name="index"
+                            type="hidden"
+                            value="0"
+                        />
                         <input
                             autofocus
                             class="c-field"
                             name="title"
                             placeholder="Title"
                             type="text"
+                            value="<%= title %>"
                         />
                         <input
                             class="c-field p-quickstore__tags"
                             name="tags"
                             placeholder="Tags"
                             type="text"
+                            value="<%= tags %>"
                         />
                         <textarea
                             class="c-field c-field--textarea p-quickstore__content"
                             name="content"
                             placeholder="Content"
                             type="text"
-                        ></textarea>
+                        ><%= content %></textarea>
                         <div class="c-container__right">
                             <input
                                 class="c-button p-quickstore__action"
@@ -84,12 +91,27 @@
                                 value="Save"
                             />
                         </div>
+                        <% if (locals.error) { %>
+                        <span class="c-alert c-alert--error">
+                            <%= error %>
+                        </span>
+                        <% } %>
+                        <% if (locals.success) { %>
+                        <span class="c-alert c-alert--success">
+                            <%= success %>
+                        </span>
+                        <% } %>
                     </form>
                     <form
                         class="c-tabs__content__area"
                         action="/quickstore"
                         method="post"
                     >
+                        <input
+                            name="index"
+                            type="hidden"
+                            value="1"
+                        />
                         <input
                             name="append"
                             type="hidden"
@@ -101,13 +123,14 @@
                             name="title"
                             placeholder="Title"
                             type="text"
+                            value="<%= title %>"
                         />
                         <textarea
                             class="c-field c-field--textarea p-quickstore__content"
                             name="content"
                             placeholder="Content"
                             type="text"
-                        ></textarea>
+                        ><%= content %></textarea>
                         <div class="c-container__right">
                             <input
                                 class="c-button p-quickstore__action"
@@ -115,6 +138,16 @@
                                 value="Update"
                             />
                         </div>
+                        <% if (locals.error) { %>
+                        <span class="c-alert c-alert--error">
+                            <%= error %>
+                        </span>
+                        <% } %>
+                        <% if (locals.success) { %>
+                        <span class="c-alert c-alert--success">
+                            <%= success %>
+                        </span>
+                        <% } %>
                     </form>
                     <% if (locals.inboxTitle) { %>
                     <form
@@ -122,6 +155,11 @@
                         action="/quickstore"
                         method="post"
                     >
+                        <input
+                            name="index"
+                            type="hidden"
+                            value="2"
+                        />
                         <input
                             name="append"
                             type="hidden"
@@ -145,7 +183,7 @@
                             name="content"
                             placeholder="Content"
                             type="text"
-                        ></textarea>
+                        ><%= content %></textarea>
                         <div class="c-container__right">
                             <input
                                 class="c-button p-quickstore__action"
@@ -153,6 +191,16 @@
                                 value="Update"
                             />
                         </div>
+                        <% if (locals.error) { %>
+                        <span class="c-alert c-alert--error">
+                            <%= error %>
+                        </span>
+                        <% } %>
+                        <% if (locals.success) { %>
+                        <span class="c-alert c-alert--success">
+                            <%= success %>
+                        </span>
+                        <% } %>
                     </form>
                     <% } %>
                     <form
@@ -160,6 +208,11 @@
                         action="/quickstore"
                         method="post"
                     >
+                        <input
+                            name="index"
+                            type="hidden"
+                            value="3"
+                        />
                         <input
                             name="settings"
                             type="hidden"
@@ -186,6 +239,16 @@
                                 value="Save"
                             />
                         </div>
+                        <% if (locals.error) { %>
+                        <span class="c-alert c-alert--error">
+                            <%= error %>
+                        </span>
+                        <% } %>
+                        <% if (locals.success) { %>
+                        <span class="c-alert c-alert--success">
+                            <%= success %>
+                        </span>
+                        <% } %>
                     </form>
                 </div>
             </div>
@@ -194,8 +257,10 @@
             const tabs = document.querySelector('.c-tabs');
             const links = document.querySelectorAll('.c-tabs__nav__link');
             const areas = document.querySelectorAll('.c-tabs__content__area');
-            let currentLink = links[0];
-            let currentArea = areas[0];
+            let currentLink = links[<%= Number(index) %>];
+            let currentArea = areas[<%= Number(index) %>];
+            currentLink.classList.add('c-tabs__nav__link--selected');
+            currentArea.classList.add('c-tabs__content__area--selected');
             tabs.querySelectorAll('.c-tabs__nav__link').forEach((link, index) => {
                 link.addEventListener('click', () => {
                     currentLink.classList.remove('c-tabs__nav__link--selected');

@@ -18,6 +18,20 @@ body {
     justify-content: center;
 }
 
+    .c-alert {
+        display: block;
+        margin-top: 15px;
+        text-align: right;
+    }
+
+    .c-alert--error {
+        color: #d32f2f;
+    }
+
+    .c-alert--success {
+        color: #2e7d32;
+    }
+
     .c-field {
         border: none;
         border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -104,16 +118,22 @@ body {
             background: #2196f3;
             color: white;
             display: flex;
-            font-size: 1.2em;
             list-style: none;
             margin: 0;
             padding: 0;
+            text-transform: uppercase;
         }
 
             .c-tabs__nav__link {
                 border-bottom: 2px solid transparent;
                 cursor: pointer;
+                opacity: 0.65;
                 padding: 10px 15px;
+            }
+
+            .c-tabs__nav__link:hover,
+            .c-tabs__nav__link:focus {
+                opacity: 1;
             }
 
             .c-tabs__nav__spacer {
@@ -122,6 +142,7 @@ body {
 
             .c-tabs__nav__link--selected {
                 border-bottom-color: white;
+                opacity: 1;
             }
 
         .c-tabs__content {
