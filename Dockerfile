@@ -15,5 +15,8 @@ EXPOSE 8080
 
 COPY wiki.sh .
 
+# Run as the node user
+USER 1000
+
 WORKDIR /var/lib/wiki/data
 CMD /var/lib/wiki/server/wiki.sh
