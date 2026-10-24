@@ -1,4 +1,24 @@
-# TiddlyWiki5 for Docker
+# TiddlyWiki 5 Docker Deployment
+
+> **Archive notice · Historical / unmaintained.** This project is preserved as a record of earlier engineering work. It is not receiving active compatibility or security updates. Instructions and third-party integrations reflect the project's original era; verify them independently before running the code.
+
+## Retrospective
+
+### The problem and product
+
+A containerized TiddlyWiki distribution designed for persistent personal wiki hosting, with a browser-friendly login screen and a quick-store interface for updating tiddlers.
+
+### Engineering approach
+
+The packaging separates wiki data from the disposable container using a mounted volume. It includes authentication components, a fast capture form, and an example backup script, emphasizing the operational details needed for a useful self-hosted tool.
+
+### Takeaways and limitations
+
+The deployment and dependency guidance belongs to the project's original era. Old container images, login handling, and backup scripts must be reviewed before use; the sample deployment should not be mistaken for a security-audited current hosting configuration.
+
+**Related work:** [Markdown](https://github.com/anstosa/tw5-markdown) · [Docker deployment](https://github.com/anstosa/tw5-docker) · [Demo](https://github.com/anstosa/tw5-demo) · [Material theme](https://github.com/anstosa/tw5-material-theme) · [Material companion](https://github.com/anstosa/tw5-material-plugin)
+
+## Original documentation
 
 * [TiddlyWiki5](http://tiddlywiki.com)
 * Contained nicely in Docker
